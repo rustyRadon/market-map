@@ -1,0 +1,42 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+/frontend
+├── /public             # Static assets (logos, fallback images)
+├── /src
+│   ├── /api            # Axios/Fetch instances for Actix-web
+│   ├── /assets         # Global CSS and Image imports
+│   ├── /components     # Shared UI (Buttons, Inputs, Modals)
+│   ├── /features       # Core Business Logic
+│   │   ├── /auth       # Login/Signup forms & logic
+│   │   ├── /market     # Grid, PriceCards, Category logic
+│   │   └── /stats      # Charts and Trend analysis
+│   ├── /hooks          # Reusable React hooks (e.g., useAuth)
+│   ├── /layouts        # Persistent wrappers (Sidebar + Navbar)
+│   ├── /pages          # Route-level views (Home, Login, Signup)
+│   ├── /store          # State management (Zustand)
+│   ├── /types          # TypeScript interfaces
+│   ├── App.tsx         # Routing and Global Providers
+│   └── main.tsx        # Entry point
