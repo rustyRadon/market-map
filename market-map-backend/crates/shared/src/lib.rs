@@ -6,7 +6,6 @@ pub mod models;
 
 pub type DbPool = Pool<Postgres>;
 
-/// Initialize a connection pool to PostgreSQL using the DATABASE_URL environment variable.
 pub async fn establish_connection() -> DbPool {
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set in the .env file or environment");

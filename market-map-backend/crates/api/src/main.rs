@@ -72,7 +72,7 @@ async fn login(
     State(pool): State<sqlx::PgPool>,
     Json(payload): Json<LoginRequest>,
 ) -> Result<Json<Value>, (StatusCode, String)> {
-    // 1. Fetch user by email
+   
     let user = sqlx::query!(
         "SELECT id, email, password_hash FROM users WHERE email = $1",
         payload.email
@@ -82,7 +82,6 @@ async fn login(
     .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Database error".into()))?
     .ok_or((StatusCode::UNAUTHORIZED, "Invalid email or password".into()))?;
 
-    // 2. Verify password
     let is_valid = verify(payload.password, &user.password_hash)
         .map_err(|_| (StatusCode::INTERNAL_SERVER_ERROR, "Verification error".into()))?;
 
