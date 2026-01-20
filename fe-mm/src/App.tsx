@@ -35,7 +35,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Auth Routes (No Sidebar) */}
         <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
         <Route path="/signup" element={!isAuthenticated ? <Signup /> : <Navigate to="/" />} />
         
