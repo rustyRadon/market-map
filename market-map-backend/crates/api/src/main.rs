@@ -41,7 +41,7 @@ async fn main() -> anyhow::Result<()> {
         .with_state(pool);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
-    println!("🚀 MarketMap API running at http://{}", addr);
+    println!(" MarketMap API running at http://{}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app).await?;

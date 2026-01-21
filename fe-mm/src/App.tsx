@@ -2,16 +2,12 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore.ts';
 import Login from './pages/Login.tsx';
-<<<<<<< HEAD
-import Signup from './pages/Signup.tsx'; 
-=======
 import Signup from './pages/Signup.tsx';
->>>>>>> 2089627 (be)
 import Home from './pages/Home.tsx';
 import ProfileSettings from './pages/ProfileSettings.tsx';
 import MainLayout from './layouts/MainLayout.tsx';
 
-// A simple wrapper to protect routes that REQUIRE login
+// Wrapper to protect routes that require login
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuthStore();
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
@@ -21,7 +17,6 @@ function App() {
   const { isAuthenticated, isInitialLoading, setInitialLoading } = useAuthStore();
 
   useEffect(() => {
-    // Simulate initial auth check (e.g., verifying a stored token)
     const timer = setTimeout(() => {
       setInitialLoading(false);
     }, 800);
@@ -49,11 +44,7 @@ function App() {
   return (
     <Router>
       <Routes>
-<<<<<<< HEAD
-        <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
-        <Route path="/signup" element={!isAuthenticated ? <Signup /> : <Navigate to="/" />} />
-=======
-        {/* Public Auth Routes: Only accessible if NOT logged in */}
+        {/* Auth Routes */}
         <Route 
           path="/login" 
           element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} 
@@ -62,18 +53,14 @@ function App() {
           path="/signup" 
           element={!isAuthenticated ? <Signup /> : <Navigate to="/" replace />} 
         />
->>>>>>> 2089627 (be)
         
-        {/* Main Application Routes: Wrapped in Layout */}
+        {/* App Routes */}
         <Route 
           path="/*" 
           element={
             <MainLayout>
               <Routes>
-                {/* Home is public (anyone can see prices) */}
                 <Route path="/" element={<Home />} />
-                
-                {/* Protected Routes (Require login) */}
                 <Route 
                   path="/settings/profile" 
                   element={
@@ -82,8 +69,6 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
-
-                {/* Catch-all: Redirect unknown paths to Home */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </MainLayout>
