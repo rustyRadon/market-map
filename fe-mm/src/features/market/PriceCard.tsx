@@ -45,7 +45,7 @@ const PriceCard: React.FC<PriceCardProps> = ({ id, name, price, delta, img }) =>
       <div className="space-y-1">
         <h3 className="text-white font-medium text-sm truncate">{name}</h3>
         <div className="flex items-center justify-between">
-          <span className="text-lg font-bold text-white">${price.toLocaleString()}</span>
+          <span className="text-lg font-bold text-white">₦{price.toLocaleString()}</span>
           <div className={`flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded ${
             delta < 0 ? 'bg-rose-500/10 text-rose-500' : 'bg-emerald-500/10 text-emerald-500'
           }`}>
