@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 import { useWatchlistStore } from '../../store/useWatchlistStore.ts';
 
 interface PriceCardProps {
-  id: number;
+  id: string; // Changed to string to match your Home.tsx Product interface
   name: string;
   price: number;
   delta: number;
@@ -17,6 +17,7 @@ const PriceCard: React.FC<PriceCardProps> = ({ id, name, price, delta, img }) =>
 
   const handleHeartClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    // We pass the data exactly as the store expects it
     toggleWatchlist({ id, name, price, delta, img });
   };
 
@@ -43,7 +44,20 @@ const PriceCard: React.FC<PriceCardProps> = ({ id, name, price, delta, img }) =>
 
       {/* Product Info */}
       <div className="space-y-1">
-        <h3 className="text-white font-medium text-sm truncate">{name}</h3>
+        {/* Name with Hover Tooltip */}
+        <div className="relative group/tooltip">
+          <h3 className="text-white font-medium text-sm truncate">
+            {name}
+          </h3>
+          
+          {/* The Tooltip - Only shows when hovering over the name area */}
+          <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-50 pointer-events-none">
+            <div className="bg-slate-800 text-white text-[10px] rounded px-2 py-1 shadow-xl border border-slate-700 w-max max-w-[200px] whitespace-normal">
+              {name}
+            </div>
+          </div>
+        </div>
+
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-white">₦{price.toLocaleString()}</span>
           <div className={`flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded ${

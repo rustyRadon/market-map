@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useWatchlistStore } from '../store/useWatchlistStore.ts';
 import { useSearchStore } from '../store/useSearchStore.ts';
 import PriceCard from '../features/market/PriceCard.tsx';
+import PriceModal from '../features/market/PriceModal.tsx';
 import { Trash2, SearchX, Loader2 } from 'lucide-react';
 
 interface Product {
@@ -23,6 +24,8 @@ const Home: React.FC = () => {
 
   const [marketData, setMarketData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const isWatchlistView = view === 'watchlist';
 
@@ -49,6 +52,11 @@ const Home: React.FC = () => {
     if (!previous || previous === 0 || current === previous) return 0;
     const percentage = ((current - previous) / previous) * 100;
     return parseFloat(percentage.toFixed(2));
+  };
+
+  const handleCardClick = (product: any) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
   };
 
   const displayData = isWatchlistView ? watchlistItems : marketData;
@@ -85,17 +93,18 @@ const Home: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {displayData.map((item: any) => {
             const currentPrice = typeof item.avg_price === 'string' ? parseFloat(item.avg_price) : item.price;
-            const deltaValue = item.previous_price ? calculateDelta(item.avg_price, item.previous_price) : 0;
+            const deltaValue = item.previous_price ? calculateDelta(item.avg_price, item.previous_price) : (item.delta || 0);
 
             return (
-              <PriceCard 
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                price={currentPrice} 
-                delta={deltaValue}
-                img={item.image_url || item.img || 'https://via.placeholder.com/400'}
-              />
+              <div key={item.id} onClick={() => handleCardClick({ name: item.name, price: currentPrice, delta: deltaValue })}>
+                <PriceCard 
+                  id={item.id}
+                  name={item.name}
+                  price={currentPrice} 
+                  delta={deltaValue}
+                  img={item.image_url || item.img || 'https://via.placeholder.com/400'}
+                />
+              </div>
             );
           })}
         </div>
@@ -108,6 +117,12 @@ const Home: React.FC = () => {
           </p>
         </div>
       )}
+
+      <PriceModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        product={selectedProduct} 
+      />
     </div>
   );
 };

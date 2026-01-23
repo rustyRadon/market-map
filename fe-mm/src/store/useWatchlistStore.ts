@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface WatchlistItem {
-  id: number;
+  id: string; // Ensure this is string to match Rust Backend
   name: string;
   price: number;
   delta: number;
@@ -12,7 +12,7 @@ interface WatchlistItem {
 interface WatchlistState {
   items: WatchlistItem[];
   toggleWatchlist: (item: WatchlistItem) => void;
-  isInWatchlist: (id: number) => boolean;
+  isInWatchlist: (id: string) => boolean;
   clearWatchlist: () => void; 
 }
 
