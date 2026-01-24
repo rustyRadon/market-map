@@ -3,7 +3,7 @@ import { Heart } from 'lucide-react';
 import { useWatchlistStore } from '../../store/useWatchlistStore.ts';
 
 interface PriceCardProps {
-  id: string; // Changed to string to match your Home.tsx Product interface
+  id: string; 
   name: string;
   price: number;
   delta: number;
@@ -17,7 +17,6 @@ const PriceCard: React.FC<PriceCardProps> = ({ id, name, price, delta, img }) =>
 
   const handleHeartClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    // We pass the data exactly as the store expects it
     toggleWatchlist({ id, name, price, delta, img });
   };
 
@@ -50,7 +49,7 @@ const PriceCard: React.FC<PriceCardProps> = ({ id, name, price, delta, img }) =>
             {name}
           </h3>
           
-          {/* The Tooltip - Only shows when hovering over the name area */}
+          {/* only shows when hovering over the name area */}
           <div className="absolute bottom-full left-0 mb-2 hidden group-hover/tooltip:block z-50 pointer-events-none">
             <div className="bg-slate-800 text-white text-[10px] rounded px-2 py-1 shadow-xl border border-slate-700 w-max max-w-[200px] whitespace-normal">
               {name}
