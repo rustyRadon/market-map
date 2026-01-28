@@ -1,15 +1,16 @@
 use axum::{
-    extract::{Query, State},
+    extract::{Path, Query, State},
     http::StatusCode,
     routing::{get, post},
     Json, Router,
 };
 use bcrypt::{hash, verify, DEFAULT_COST};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use shared::{establish_connection, models::product::Product};
 use std::net::SocketAddr;
 use tower_http::cors::CorsLayer;
+use uuid::Uuid;
 
 #[derive(Deserialize)]
 struct RegisterRequest {
@@ -28,6 +29,14 @@ struct SearchParams {
     search: Option<String>,
 }
 
+#[derive(Serialize)]
+pub struct MarketStats {
+    pub highest_price: f64,
+    pub lowest_price: f64,
+    pub average_price: f64,
+    pub similar_count: i64,
+}
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
@@ -35,6 +44,7 @@ async fn main() -> anyhow::Result<()> {
 
     let app = Router::new()
         .route("/products", get(get_products))
+        .route("/products/:id/stats", get(get_market_intelligence))
         .route("/register", post(register))
         .route("/login", post(login))
         .layer(CorsLayer::permissive())
@@ -47,6 +57,39 @@ async fn main() -> anyhow::Result<()> {
     axum::serve(listener, app).await?;
 
     Ok(())
+}
+
+async fn get_market_intelligence(
+    Path(id): Path<Uuid>,
+    State(pool): State<sqlx::PgPool>,
+) -> Result<Json<MarketStats>, (StatusCode, String)> {
+    let product = sqlx::query!("SELECT name FROM products WHERE id = $1", id)
+        .fetch_one(&pool)
+        .await
+        .map_err(|_| (StatusCode::NOT_FOUND, "Product not found".into()))?;
+
+    let stats = sqlx::query!(
+        r#"
+        SELECT 
+            MAX(avg_price::float8) as max_p, 
+            MIN(avg_price::float8) as min_p, 
+            AVG(avg_price::float8) as avg_p,
+            COUNT(*) as count
+        FROM products 
+        WHERE similarity(name, $1) > 0.3
+        "#,
+        product.name
+    )
+    .fetch_one(&pool)
+    .await
+    .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()))?;
+
+    Ok(Json(MarketStats {
+        highest_price: stats.max_p.unwrap_or(0.0),
+        lowest_price: stats.min_p.unwrap_or(0.0),
+        average_price: stats.avg_p.unwrap_or(0.0),
+        similar_count: stats.count.unwrap_or(0),
+    }))
 }
 
 async fn register(

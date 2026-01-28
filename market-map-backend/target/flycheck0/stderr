@@ -1,21 +1,94 @@
-   0.161239402s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: dependency on `shared` is newer than we are 1769014207.188611650s > 1768983015.633189957s "/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api"
-   0.161966451s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: fingerprint dirty for api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api)/Check { test: false }/TargetInner { name: "api", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api/src/main.rs", Edition2021) }
-   0.161982935s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "shared", dep_mtime: FileTime { seconds: 1769014207, nanos: 188611650 }, max_mtime: FileTime { seconds: 1768983015, nanos: 633189957 } })
-   0.187316521s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: dependency on `shared` is newer than we are 1769014207.188611650s > 1768983015.631191969s "/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api"
-   0.187481881s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: fingerprint dirty for api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api)/Check { test: true }/TargetInner { name: "api", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api/src/main.rs", Edition2021) }
-   0.187494165s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "shared", dep_mtime: FileTime { seconds: 1769014207, nanos: 188611650 }, max_mtime: FileTime { seconds: 1768983015, nanos: 631191969 } })
-   0.191542388s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint: dependency on `url` is newer than we are 1769014187.243301610s > 1768983014.177726278s "/home/rusty-radon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.11.27"
-   0.195440963s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint: dependency on `shared` is newer than we are 1769014207.188611650s > 1768983014.329560353s "/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper"
-   0.195652774s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint: fingerprint dirty for market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper)/Check { test: false }/TargetInner { name: "market-scraper", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper/src/main.rs", Edition2024) }
-   0.195666964s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "shared", dep_mtime: FileTime { seconds: 1769014207, nanos: 188611650 }, max_mtime: FileTime { seconds: 1768983014, nanos: 329560353 } })
-   0.196992475s  INFO prepare_target{force=false package_id=reqwest v0.11.27 target="reqwest"}: cargo::core::compiler::fingerprint: fingerprint dirty for reqwest v0.11.27/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("reqwest", ["lib"], "/home/rusty-radon/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/reqwest-0.11.27/src/lib.rs", Edition2021) }
-   0.197008743s  INFO prepare_target{force=false package_id=reqwest v0.11.27 target="reqwest"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "url", dep_mtime: FileTime { seconds: 1769014187, nanos: 243301610 }, max_mtime: FileTime { seconds: 1768983014, nanos: 177726278 } })
-   0.204239121s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint: dependency on `shared` is newer than we are 1769014207.188611650s > 1768983014.325564719s "/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper"
-   0.204401566s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint: fingerprint dirty for market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper)/Check { test: true }/TargetInner { name: "market-scraper", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper/src/main.rs", Edition2024) }
-   0.204420015s  INFO prepare_target{force=false package_id=market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper) target="market-scraper"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "shared", dep_mtime: FileTime { seconds: 1769014207, nanos: 188611650 }, max_mtime: FileTime { seconds: 1768983014, nanos: 325564719 } })
-    Checking reqwest v0.11.27
+   0.238712625s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: fingerprint error for api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api)/Check { test: false }/TargetInner { name: "api", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api/src/main.rs", Edition2021) }
+   0.238749273s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/target/debug/.fingerprint/api-a5a4bb1ed755bf2c/bin-api`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/core/src/ops/function.rs:287:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:590:40
+  16: std::panicking::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:553:19
+  17: std::panic::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:590:40
+  20: std::panicking::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:553:19
+  21: std::panic::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:392:3
+  26: <unknown>
+   0.378166686s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint: fingerprint error for api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api)/Check { test: true }/TargetInner { name: "api", doc: true, ..: with_path("/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api/src/main.rs", Edition2021) }
+   0.378189257s  INFO prepare_target{force=false package_id=api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api) target="api"}: cargo::core::compiler::fingerprint:     err: failed to read `/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/target/debug/.fingerprint/api-77bcb45b8f236f75/test-bin-api`
+
+Caused by:
+    No such file or directory (os error 2)
+
+Stack backtrace:
+   0: cargo_util::paths::read_bytes
+   1: cargo_util::paths::read
+   2: cargo::core::compiler::fingerprint::_compare_old_fingerprint
+   3: cargo::core::compiler::fingerprint::prepare_target
+   4: cargo::core::compiler::compile
+   5: <cargo::core::compiler::build_runner::BuildRunner>::compile
+   6: cargo::ops::cargo_compile::compile_ws
+   7: cargo::ops::cargo_compile::compile_with_exec
+   8: cargo::ops::cargo_compile::compile
+   9: cargo::commands::check::exec
+  10: <cargo::cli::Exec>::exec
+  11: cargo::main
+  12: std::sys::backtrace::__rust_begin_short_backtrace::<fn(), ()>
+  13: std::rt::lang_start::<()>::{closure#0}
+  14: core::ops::function::impls::<impl core::ops::function::FnOnce<A> for &F>::call_once
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/core/src/ops/function.rs:287:21
+  15: std::panicking::catch_unwind::do_call
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:590:40
+  16: std::panicking::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:553:19
+  17: std::panic::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panic.rs:359:14
+  18: std::rt::lang_start_internal::{{closure}}
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/rt.rs:175:24
+  19: std::panicking::catch_unwind::do_call
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:590:40
+  20: std::panicking::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panicking.rs:553:19
+  21: std::panic::catch_unwind
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/panic.rs:359:14
+  22: std::rt::lang_start_internal
+             at /rustc/ed61e7d7e242494fb7057f2657300d9e77bb4fcb/library/std/src/rt.rs:171:5
+  23: main
+  24: __libc_start_call_main
+             at ./csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+  25: __libc_start_main_impl
+             at ./csu/../csu/libc-start.c:392:3
+  26: <unknown>
     Checking api v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/api)
-    Checking market-scraper v0.1.0 (/home/rusty-radon/Documents/rustyRadon/market-map/market-map-backend/crates/scraper)
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.12s
-warning: the following packages contain code that will be rejected by a future version of Rust: sqlx-postgres v0.7.4
-note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+error: could not compile `api` (bin "api" test) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `api` (bin "api") due to 1 previous error

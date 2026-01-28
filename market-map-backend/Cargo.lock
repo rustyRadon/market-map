@@ -50,6 +50,7 @@ dependencies = [
  "sqlx",
  "tokio",
  "tower-http",
+ "uuid",
 ]
 
 [[package]]

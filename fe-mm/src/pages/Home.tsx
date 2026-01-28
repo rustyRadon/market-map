@@ -96,7 +96,7 @@ const Home: React.FC = () => {
             const deltaValue = item.previous_price ? calculateDelta(item.avg_price, item.previous_price) : (item.delta || 0);
 
             return (
-              <div key={item.id} onClick={() => handleCardClick({ name: item.name, price: currentPrice, delta: deltaValue })}>
+              <div key={item.id} onClick={() => handleCardClick({ id: item.id, name: item.name, price: currentPrice, delta: deltaValue })}>
                 <PriceCard 
                   id={item.id}
                   name={item.name}
