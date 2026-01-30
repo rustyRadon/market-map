@@ -5,7 +5,6 @@
 ---
 
 ## 📄 Resume / Portfolio Bullet Points
-*Copy these directly into your Experience section:*
 
 * **Engineered a high-performance Market Intelligence platform** using **Rust (Axum)** and **React**, featuring a custom **Query Engine** that performs real-time fuzzy-match data aggregation.
 * **Developed a PostgreSQL-backed analytics suite** utilizing **Trigram Similarity algorithms** to consolidate disparate market listings into actionable "High/Low/Avg" price ranges.
