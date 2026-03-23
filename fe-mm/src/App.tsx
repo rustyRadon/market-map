@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore.ts';
+import { useThemeStore } from './store/useThemeStore.ts';
 import Login from './pages/Login.tsx';
 import Signup from './pages/Signup.tsx';
 import Home from './pages/Home.tsx';
@@ -15,6 +16,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   const { isAuthenticated, isInitialLoading, setInitialLoading } = useAuthStore();
+  const { isDark } = useThemeStore();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -42,40 +44,42 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {/* Auth Routes */}
-        <Route 
-          path="/login" 
-          element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} 
-        />
-        <Route 
-          path="/signup" 
-          element={!isAuthenticated ? <Signup /> : <Navigate to="/" replace />} 
-        />
-        
-        {/* App Routes */}
-        <Route 
-          path="/*" 
-          element={
-            <MainLayout>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route 
-                  path="/settings/profile" 
-                  element={
-                    <ProtectedRoute>
-                      <ProfileSettings />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </MainLayout>
-          } 
-        />
-      </Routes>
-    </Router>
+    <div className={`min-h-screen transition-colors ${isDark ? 'bg-[#0a0a0c] text-white' : 'bg-white text-slate-900'}`}>
+      <Router>
+        <Routes>
+          {/* Auth Routes */}
+          <Route 
+            path="/login" 
+            element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} 
+          />
+          <Route 
+            path="/signup" 
+            element={!isAuthenticated ? <Signup /> : <Navigate to="/" replace />} 
+          />
+          
+          {/* App Routes */}
+          <Route 
+            path="/*" 
+            element={
+              <MainLayout>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route 
+                    path="/settings/profile" 
+                    element={
+                      <ProtectedRoute>
+                        <ProfileSettings />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </MainLayout>
+            } 
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

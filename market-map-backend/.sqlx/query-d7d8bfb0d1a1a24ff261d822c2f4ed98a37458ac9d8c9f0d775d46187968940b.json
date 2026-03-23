@@ -1,0 +1,70 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        SELECT \n            id, name, category, avg_price, min_price, max_price, \n            image_url, previous_price, last_updated \n        FROM products \n        WHERE name ILIKE $1 OR category ILIKE $1 \n        ORDER BY last_updated DESC\n        ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Uuid"
+      },
+      {
+        "ordinal": 1,
+        "name": "name",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "category",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "avg_price",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 4,
+        "name": "min_price",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 5,
+        "name": "max_price",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 6,
+        "name": "image_url",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 7,
+        "name": "previous_price",
+        "type_info": "Numeric"
+      },
+      {
+        "ordinal": 8,
+        "name": "last_updated",
+        "type_info": "Timestamptz"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ]
+  },
+  "hash": "d7d8bfb0d1a1a24ff261d822c2f4ed98a37458ac9d8c9f0d775d46187968940b"
+}
