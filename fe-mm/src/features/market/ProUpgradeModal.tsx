@@ -19,7 +19,7 @@ const ProUpgradeModal: React.FC<ProUpgradeModalProps> = ({ isOpen, onClose }) =>
     
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/users/upgrade-pro', {
+      const response = await fetch(`${API_BASE_URL}/users/upgrade-pro`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_email: user.email }),

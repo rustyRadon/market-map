@@ -35,7 +35,7 @@ const AdminUsers = () => {
 
   const fetchAdmins = async () => {
     try {
-      const response = await fetch('http://localhost:8080/users');
+      const response = await fetch(`${API_BASE_URL}/users`);
       if (response.ok) {
         const data = await response.json();
         setAdmins(data);
@@ -52,7 +52,7 @@ const AdminUsers = () => {
 
     setAddingAdmin(true);
     try {
-      const response = await fetch('http://localhost:8080/admin/users/promote', {
+      const response = await fetch(`${API_BASE_URL}/admin/users/promote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_email: newAdminEmail.trim() }),
@@ -73,7 +73,7 @@ const AdminUsers = () => {
 
   const removeAdmin = async (email: string) => {
     try {
-      const response = await fetch('http://localhost:8080/admin/users/demote', {
+      const response = await fetch(`${API_BASE_URL}/admin/users/demote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ target_email: email }),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useWatchlistStore } from '../store/useWatchlistStore.ts';
+import { API_BASE_URL } from '../config';
 import { useSearchStore } from '../store/useSearchStore.ts';
 import { useThemeStore } from '../store/useThemeStore.ts';
 import { useNavStore } from '../store/useNavStore.ts';
@@ -73,7 +74,7 @@ const Home: React.FC = () => {
         if (subcategory) params.append('subcategory', subcategory);
         
         const queryString = params.toString();
-        const url = `http://localhost:8080/products${queryString ? `?${queryString}` : ''}`;
+        const url = `${API_BASE_URL}/products${queryString ? `?${queryString}` : ''}`;
         
         const response = await fetch(url);
         if (!response.ok) {

@@ -46,7 +46,7 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
         
         setLoading(true);
         try {
-          const response = await fetch(`http://localhost:8080/products/${product.id}/stats`);
+          const response = await fetch(`${API_BASE_URL}/products/${product.id}/stats`);
           const result = await response.json();
           setStats(result);
         } catch (err) {
