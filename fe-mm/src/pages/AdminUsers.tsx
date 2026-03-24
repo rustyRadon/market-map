@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Trash2, Crown, Users, Shield, Loader2 } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Crown, Users, Shield, Loader2, X, Mail, User } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 interface AdminUser {
@@ -18,6 +18,9 @@ const AdminUsers = () => {
   const [loading, setLoading] = useState(true);
   const [newAdminEmail, setNewAdminEmail] = useState('');
   const [addingAdmin, setAddingAdmin] = useState(false);
+  const [showTotalUsers, setShowTotalUsers] = useState(false);
+  const [showProUsers, setShowProUsers] = useState(false);
+  const [showAdmins, setShowAdmins] = useState(false);
 
   // Only allow specific admin email
   const isSuperAdmin = user?.email === 'h4554n.abdul@gmail.com';
@@ -189,30 +192,178 @@ const AdminUsers = () => {
 
         {/* Special Admin Stats */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6">
+          <div 
+            onClick={() => setShowTotalUsers(true)}
+            className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6 cursor-pointer hover:bg-blue-500/20 transition-all"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-6 h-6 text-blue-500" />
               <span className="text-blue-400 font-semibold">Total Users</span>
             </div>
             <p className="text-2xl font-bold text-white">{admins.length}</p>
+            <p className="text-blue-300/70 text-sm mt-1">Click to view details</p>
           </div>
 
-          <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-6">
+          <div 
+            onClick={() => setShowProUsers(true)}
+            className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-6 cursor-pointer hover:bg-green-500/20 transition-all"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Crown className="w-6 h-6 text-green-500" />
               <span className="text-green-400 font-semibold">Pro Users</span>
             </div>
             <p className="text-2xl font-bold text-white">{admins.filter(a => a.is_pro).length}</p>
+            <p className="text-green-300/70 text-sm mt-1">Click to view details</p>
           </div>
 
-          <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6">
+          <div 
+            onClick={() => setShowAdmins(true)}
+            className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6 cursor-pointer hover:bg-purple-500/20 transition-all"
+          >
             <div className="flex items-center gap-3 mb-2">
               <Shield className="w-6 h-6 text-purple-500" />
               <span className="text-purple-400 font-semibold">Admins</span>
             </div>
             <p className="text-2xl font-bold text-white">{admins.filter(a => a.is_admin).length}</p>
+            <p className="text-purple-300/70 text-sm mt-1">Click to view details</p>
           </div>
         </div>
+
+        {/* Total Users Modal */}
+        {showTotalUsers && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#16161a] border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+              <div className="p-6 border-b border-slate-800">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Users className="w-6 h-6 text-blue-500" />
+                    <h2 className="text-xl font-bold text-white">All Users ({admins.length})</h2>
+                  </div>
+                  <button
+                    onClick={() => setShowTotalUsers(false)}
+                    className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 max-h-96 overflow-y-auto">
+                <div className="space-y-3">
+                  {admins.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-4 bg-[#0a0a0c] border border-slate-700 rounded-xl">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-blue-500/10 rounded-lg">
+                          <User className="w-5 h-5 text-blue-500" />
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">{user.email.split('@')[0]}</p>
+                          <p className="text-slate-400 text-sm flex items-center gap-1">
+                            <Mail size={12} />
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {user.is_pro && <Crown className="w-4 h-4 text-green-500" />}
+                        {user.is_admin && <Shield className="w-4 h-4 text-purple-500" />}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Pro Users Modal */}
+        {showProUsers && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#16161a] border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+              <div className="p-6 border-b border-slate-800">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Crown className="w-6 h-6 text-green-500" />
+                    <h2 className="text-xl font-bold text-white">Pro Users ({admins.filter(a => a.is_pro).length})</h2>
+                  </div>
+                  <button
+                    onClick={() => setShowProUsers(false)}
+                    className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 max-h-96 overflow-y-auto">
+                <div className="space-y-3">
+                  {admins.filter(user => user.is_pro).map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-4 bg-[#0a0a0c] border border-slate-700 rounded-xl">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-green-500/10 rounded-lg">
+                          <Crown className="w-5 h-5 text-green-500" />
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">{user.email.split('@')[0]}</p>
+                          <p className="text-slate-400 text-sm flex items-center gap-1">
+                            <Mail size={12} />
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-slate-500 text-sm">
+                        Since {new Date(user.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Admins Modal */}
+        {showAdmins && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#16161a] border border-slate-800 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+              <div className="p-6 border-b border-slate-800">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Shield className="w-6 h-6 text-purple-500" />
+                    <h2 className="text-xl font-bold text-white">Administrators ({admins.filter(a => a.is_admin).length})</h2>
+                  </div>
+                  <button
+                    onClick={() => setShowAdmins(false)}
+                    className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 max-h-96 overflow-y-auto">
+                <div className="space-y-3">
+                  {admins.filter(user => user.is_admin).map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-4 bg-[#0a0a0c] border border-slate-700 rounded-xl">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-purple-500/10 rounded-lg">
+                          <Shield className="w-5 h-5 text-purple-500" />
+                        </div>
+                        <div>
+                          <p className="text-white font-medium">{user.email.split('@')[0]}</p>
+                          <p className="text-slate-400 text-sm flex items-center gap-1">
+                            <Mail size={12} />
+                            {user.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-slate-500 text-sm">
+                        Since {new Date(user.created_at).toLocaleDateString()}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

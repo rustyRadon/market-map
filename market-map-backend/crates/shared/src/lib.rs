@@ -8,13 +8,19 @@ pub type DbPool = Pool<Sqlite>;
 
 pub async fn establish_connection() -> DbPool {
     let database_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set in the .env file or environment");
+        .unwrap_or_else(|_| "sqlite:///home/rustyradon/market-map/market-map-backend/db.sqlite".to_string());
 
-    SqlitePoolOptions::new()
+    println!("Connecting to SQLite database URL: {}", database_url);
+
+    let pool = SqlitePoolOptions::new()
         .max_connections(5)
         .connect(&database_url)
-        .await
-        .expect("Failed to create database connection pool")
+        .await;
+
+    match pool {
+        Ok(p) => p,
+        Err(e) => panic!("Failed to create database connection pool: {}", e),
+    }
 }
 
 pub fn clean_price(raw: &str) -> f64 {

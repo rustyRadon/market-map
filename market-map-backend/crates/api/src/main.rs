@@ -27,6 +27,7 @@ struct LoginRequest {
 struct SearchParams {
     search: Option<String>,
     category: Option<String>,
+    subcategory: Option<String>,
 }
 
 #[derive(Serialize)]
@@ -59,7 +60,14 @@ pub struct MarketStats {
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
+    println!("Testing database connection...");
     let pool = establish_connection().await;
+    println!("Database connection successful!");
+    
+    let count: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM products")
+        .fetch_one(&pool)
+        .await?;
+    println!("Found {} products in database", count.0);
 
     let app = Router::new()
         .route("/products", get(get_products))
@@ -182,9 +190,35 @@ async fn get_products(
     State(pool): State<sqlx::SqlitePool>,
 ) -> Json<Vec<Product>> {
     let search_term = format!("%{}%", params.search.unwrap_or_default());
-    let category_filter = params.category.unwrap_or_default();
-    
-    let products = if !category_filter.is_empty() {
+    let category = params.category.unwrap_or_default();
+    let subcategory = params.subcategory.unwrap_or_default();
+
+    let effective_category = if !subcategory.is_empty() {
+        match category.as_str() {
+            "food" => format!("food-{}", subcategory),
+            "gadgets" => format!("gadgets-{}", subcategory),
+            _ => subcategory.clone(),
+        }
+    } else {
+        category.clone()
+    };
+
+    let category_clause = if !effective_category.is_empty() {
+        Some(effective_category)
+    } else {
+        None
+    };
+
+    let products = if let Some(category_val) = category_clause {
+        // main category filter for all food/gadgets when no subcategory specified
+        let query_category = if category_val == "food" {
+            "food%".to_string()
+        } else if category_val == "gadgets" {
+            "gadgets%".to_string()
+        } else {
+            category_val.clone()
+        };
+
         sqlx::query_as!(
             Product,
             r#"
@@ -193,11 +227,11 @@ async fn get_products(
                 image_url, previous_price, last_updated 
             FROM products 
             WHERE (name LIKE $1 OR $1 = '') 
-              AND category = $2
+              AND category LIKE $2
             ORDER BY last_updated DESC
             "#,
             search_term,
-            category_filter
+            query_category
         )
         .fetch_all(&pool)
         .await

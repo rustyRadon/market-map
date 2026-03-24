@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useWatchlistStore } from '../store/useWatchlistStore.ts';
 import { useSearchStore } from '../store/useSearchStore.ts';
 import { useThemeStore } from '../store/useThemeStore.ts';
@@ -25,6 +25,8 @@ const Home: React.FC = () => {
   const { viewMode, setViewMode } = useNavStore();
   const view = searchParams.get('view'); 
   const category = searchParams.get('category');
+  const subcategory = searchParams.get('subcategory');
+  const navigate = useNavigate();
   const { getUserItems, clearWatchlist } = useWatchlistStore();
   const watchlistItems = getUserItems();
 
@@ -67,6 +69,7 @@ const Home: React.FC = () => {
         const params = new URLSearchParams();
         if (searchQuery) params.append('search', searchQuery);
         if (category) params.append('category', category);
+        if (subcategory) params.append('subcategory', subcategory);
         
         const queryString = params.toString();
         const url = `http://localhost:8080/products${queryString ? `?${queryString}` : ''}`;
@@ -86,7 +89,7 @@ const Home: React.FC = () => {
       }
     };
     fetchMarketData();
-  }, [searchQuery, category, isWatchlistView]);
+  }, [searchQuery, category, subcategory, isWatchlistView]);
 
   const calculateDelta = (currentStr: string, previousStr: string) => {
     const current = parseFloat(currentStr);
