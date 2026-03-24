@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useWatchlistStore } from '../store/useWatchlistStore.ts';
 import { useSearchStore } from '../store/useSearchStore.ts';
 import { useThemeStore } from '../store/useThemeStore.ts';
@@ -35,6 +35,7 @@ const Home: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const location = useLocation();
   const isWatchlistView = view === 'watchlist';
 
   const getCategoryTitle = (cat: string | null) => {
@@ -113,6 +114,75 @@ const Home: React.FC = () => {
           <h1 className={`text-3xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
             {isWatchlistView ? 'My Watchlist' : getCategoryTitle(category)}
           </h1>
+          {category === 'food' && (
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'food');
+                  params.delete('subcategory');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${!subcategory ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                All Food
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'food');
+                  params.set('subcategory', 'fruits');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${subcategory === 'fruits' ? 'bg-green-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                Fruits
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'food');
+                  params.set('subcategory', 'food');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${subcategory === 'food' ? 'bg-amber-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                Groceries
+              </button>
+            </div>
+          )}
+
+          {category === 'gadgets' && (
+            <div className="mt-2 flex items-center gap-2">
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'gadgets');
+                  params.delete('subcategory');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${!subcategory ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                All Gadgets
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'gadgets');
+                  params.set('subcategory', 'phone');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${subcategory === 'phone' ? 'bg-indigo-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                Phones
+              </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(location.search);
+                  params.set('category', 'gadgets');
+                  params.set('subcategory', 'laptop');
+                  navigate(`/?${params.toString()}`);
+                }}
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${subcategory === 'laptop' ? 'bg-violet-500 text-white' : 'bg-slate-700 text-slate-200'}`}>
+                Laptops
+              </button>
+            </div>
+          )}
           <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
             {searchQuery ? `Results for "${searchQuery}"` : getCategoryDescription(category)}
           </p>

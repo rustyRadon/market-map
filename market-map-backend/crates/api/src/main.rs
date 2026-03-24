@@ -81,7 +81,9 @@ async fn main() -> anyhow::Result<()> {
         .layer(CorsLayer::permissive())
         .with_state(pool);
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
+    let api_port = std::env::var("API_PORT").unwrap_or_else(|_| "8080".to_string());
+    let api_port: u16 = api_port.parse().unwrap_or(8080);
+    let addr = SocketAddr::from(([127, 0, 0, 1], api_port));
     println!(" MarketMap API running at http://{}", addr);
 
     let listener = tokio::net::TcpListener::bind(addr).await?;
