@@ -3,6 +3,7 @@ import { X, BarChart3, LineChart as LineIcon, Loader2, Crown } from 'lucide-reac
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion';
 import { useAuthStore } from '../../store/useAuthStore';
+import { API_BASE_URL } from '../../config';
 import ProUpgradeModal from './ProUpgradeModal';
 
 interface PriceModalProps {

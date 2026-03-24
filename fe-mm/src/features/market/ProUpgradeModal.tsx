@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Crown, Check, Star, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/useAuthStore';
+import { API_BASE_URL } from '../../config';
 
 interface ProUpgradeModalProps {
   isOpen: boolean;

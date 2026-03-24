@@ -69,6 +69,30 @@ async fn main() -> anyhow::Result<()> {
         .await?;
     println!("Found {} products in database", count.0);
 
+    // Create admin user if it doesn't exist
+    let admin_email = "h4554n.abdul@gmail.com";
+    let admin_exists: (i64,) = sqlx::query_as("SELECT COUNT(*) FROM users WHERE email = ?")
+        .bind(admin_email)
+        .fetch_one(&pool)
+        .await?;
+    
+    if admin_exists.0 == 0 {
+        let admin_password = std::env::var("ADMIN_PASSWORD")
+            .unwrap_or_else(|_| "change_this_default_password".to_string());
+        let hashed = hash(&admin_password, DEFAULT_COST)
+            .map_err(|_| anyhow::anyhow!("Failed to hash password"))?;
+        
+        sqlx::query("INSERT INTO users (email, password_hash, is_admin) VALUES (?, ?, true)")
+            .bind(admin_email)
+            .bind(hashed)
+            .execute(&pool)
+            .await?;
+        
+        println!("Created admin user: {}", admin_email);
+    } else {
+        println!("Admin user already exists: {}", admin_email);
+    }
+
     let app = Router::new()
         .route("/products", get(get_products))
         .route("/products/:id/stats", get(get_market_intelligence))

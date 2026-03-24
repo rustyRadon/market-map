@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Trash2, Crown, Users, Shield, Loader2, X, Mail, User } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { API_BASE_URL } from '../config';
 
 interface AdminUser {
   id: string;
