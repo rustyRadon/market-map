@@ -1,2 +1,1 @@
--- Add migration script here
-ALTER TABLE products ADD COLUMN previous_price DECIMAL DEFAULT 0;
+ALTER TABLE products ADD COLUMN previous_price REAL DEFAULT 0;

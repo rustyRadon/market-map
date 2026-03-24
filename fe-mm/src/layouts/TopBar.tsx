@@ -23,11 +23,12 @@ const TopBar = () => {
     if (view === 'watchlist') return 'Search your watchlist...';
     
     switch (category) {
+      case 'gadgets': return 'Search gadgets and tech...';
       case 'food': return 'Search groceries, snacks, drinks...';
-      case 'gadgets': return 'Search phones, laptops, tech...';
       case 'education': return 'Search courses, books, tools...';
       case 'automotive': return 'Search cars, parts, accessories...';
       case 'trending': return 'Search trending deals...';
+      case 'drops': return 'Search price drops...';
       default: return 'Search for items, food, cars...';
     }
   };

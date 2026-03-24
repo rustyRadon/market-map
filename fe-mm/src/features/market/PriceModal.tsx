@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X, BarChart3, LineChart as LineIcon, Loader2 } from 'lucide-react';
+import { X, BarChart3, LineChart as LineIcon, Loader2, Crown } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { motion, AnimatePresence, type PanInfo } from 'framer-motion';
+import { useAuthStore } from '../../store/useAuthStore';
+import ProUpgradeModal from './ProUpgradeModal';
 
 interface PriceModalProps {
   isOpen: boolean;
   onClose: () => void;
   product: {
-    id: string; // Added ID to fetch stats
+    id: string;
     name: string;
     price: number;
     delta: number;
@@ -31,10 +33,17 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
   const [view, setView] = useState<'chart' | 'stats'>('chart');
   const [stats, setStats] = useState<MarketStats | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showProModal, setShowProModal] = useState(false);
+  const { user } = useAuthStore();
 
   useEffect(() => {
     if (isOpen && product?.id) {
       const fetchStats = async () => {
+        if (!user?.is_pro) {
+          setShowProModal(true);
+          return;
+        }
+        
         setLoading(true);
         try {
           const response = await fetch(`http://localhost:8080/products/${product.id}/stats`);
@@ -48,11 +57,11 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
       };
       fetchStats();
     } else {
-      // Reset view and stats when modal closes
       setView('chart');
       setStats(null);
+      setShowProModal(false);
     }
-  }, [isOpen, product?.id]);
+  }, [isOpen, product?.id, user?.is_pro]);
 
   if (!isOpen || !product) return null;
 
@@ -75,7 +84,6 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
         animate={{ scale: 1, opacity: 1, y: 0 }}
         className="bg-[#16161a] border border-slate-800 w-full max-w-[95%] sm:max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative"
       >
-        {/* Header */}
         <div className="p-4 sm:p-6 border-b border-slate-800 flex justify-between items-start bg-[#16161a] z-10 relative">
           <div className="flex-1 min-w-0">
             <h2 className="text-sm sm:text-xl font-bold text-white mb-1 truncate pr-4">{product.name}</h2>
@@ -99,7 +107,6 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
           </button>
         </div>
 
-        {/* Content Area */}
         <motion.div 
           className="relative h-[280px] sm:h-[350px] w-full overflow-hidden cursor-grab active:cursor-grabbing"
           drag="x"
@@ -173,6 +180,20 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
                       Based on {stats.similar_count} similar products found
                     </p>
                   </>
+                ) : !user?.is_pro ? (
+                  <div className="flex flex-col items-center justify-center space-y-4">
+                    <Crown className="w-12 h-12 text-yellow-500" />
+                    <div className="text-center space-y-2">
+                      <h3 className="text-white font-bold text-lg">Pro Feature</h3>
+                      <p className="text-slate-400 text-sm">Unlock market intelligence with detailed price analysis and competitor insights.</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowProModal(true)}
+                      className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:from-yellow-600 hover:to-orange-600 transition-all active:scale-95"
+                    >
+                      Upgrade to Pro
+                    </button>
+                  </div>
                 ) : (
                   <p className="text-slate-500 text-center">No market data available.</p>
                 )}
@@ -181,12 +202,16 @@ const PriceModal: React.FC<PriceModalProps> = ({ isOpen, onClose, product }) => 
           </AnimatePresence>
         </motion.div>
 
-        {/* Indicator Dots */}
         <div className="flex justify-center gap-2 pb-4 sm:pb-6">
           <div className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${view === 'chart' ? 'w-4 sm:w-6 bg-blue-600' : 'w-1.5 sm:w-2 bg-slate-800'}`} />
           <div className={`h-1 sm:h-1.5 rounded-full transition-all duration-300 ${view === 'stats' ? 'w-4 sm:w-6 bg-blue-600' : 'w-1.5 sm:w-2 bg-slate-800'}`} />
         </div>
       </motion.div>
+
+      <ProUpgradeModal 
+        isOpen={showProModal} 
+        onClose={() => setShowProModal(false)} 
+      />
     </div>
   );
 };

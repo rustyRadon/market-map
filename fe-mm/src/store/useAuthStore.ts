@@ -5,15 +5,18 @@ interface User {
   id: string;
   name: string;
   email: string;
+  is_admin?: boolean;
+  is_pro?: boolean;
 }
 
 interface AuthState {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isInitialLoading: boolean;
   profileImage: string;
 
-  login: (user: User) => void;
+  login: (user: User, token: string) => void;
   logout: () => void;
   
   setInitialLoading: (loading: boolean) => void;
@@ -24,18 +27,21 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      token: null,
       isAuthenticated: false,
       isInitialLoading: true,
       profileImage: 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&bold=true',
 
-      login: (user) => set({ 
+      login: (user, token) => set({ 
         user, 
+        token,
         isAuthenticated: true,
         profileImage: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff&bold=true`
       }),
 
       logout: () => set({ 
         user: null, 
+        token: null,
         isAuthenticated: false,
         profileImage: 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&bold=true'
       }),

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuthStore } from '../store/useAuthStore'; // Import your store
+import { useAuthStore } from '../store/useAuthStore';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const login = useAuthStore((state) => state.login); // Get login function from store
+  const login = useAuthStore((state) => state.login);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,8 +22,8 @@ const Login = () => {
 
       if (response.ok) {
         const userData = await response.json();
-        login(userData); // This saves to local storage and updates the app state
-        navigate('/'); // Go to market overview
+        login(userData, 'dummy-token'); // TODO: Use real JWT token
+        navigate('/');
       } else {
         setError('Invalid email or password');
       }

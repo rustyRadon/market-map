@@ -12,7 +12,6 @@ const Signup = () => {
     setError('');
 
     try {
-      //  Ensure this URL matches your Rust addr exactly
       const response = await fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

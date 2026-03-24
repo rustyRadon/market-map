@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface WatchlistItem {
-  id: string; // Ensure this is string to match Rust Backend
+  id: string;
   name: string;
   price: number;
   delta: number;

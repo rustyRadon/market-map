@@ -1,17 +1,17 @@
-use sqlx::postgres::PgPoolOptions;
-use sqlx::{Pool, Postgres};
+use sqlx::sqlite::SqlitePoolOptions;
+use sqlx::{Pool, Sqlite};
 use std::env;
 
-pub mod models; 
+pub mod models;
 
-pub type DbPool = Pool<Postgres>;
+pub type DbPool = Pool<Sqlite>;
 
 pub async fn establish_connection() -> DbPool {
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set in the .env file or environment");
 
-    PgPoolOptions::new()
-        .max_connections(5) 
+    SqlitePoolOptions::new()
+        .max_connections(5)
         .connect(&database_url)
         .await
         .expect("Failed to create database connection pool")

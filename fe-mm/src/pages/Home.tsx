@@ -3,9 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { useWatchlistStore } from '../store/useWatchlistStore.ts';
 import { useSearchStore } from '../store/useSearchStore.ts';
 import { useThemeStore } from '../store/useThemeStore.ts';
+import { useNavStore } from '../store/useNavStore.ts';
 import PriceCard from '../features/market/PriceCard.tsx';
 import PriceModal from '../features/market/PriceModal.tsx';
-import { Trash2, SearchX, Loader2 } from 'lucide-react';
+import { Trash2, SearchX, Loader2, Grid3X3, List } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -21,7 +22,9 @@ const Home: React.FC = () => {
   const [searchParams] = useSearchParams();
   const { searchQuery } = useSearchStore(); 
   const { isDark } = useThemeStore();
+  const { viewMode, setViewMode } = useNavStore();
   const view = searchParams.get('view'); 
+  const category = searchParams.get('category');
   const { items: watchlistItems, clearWatchlist } = useWatchlistStore();
 
   const [marketData, setMarketData] = useState<Product[]>([]);
@@ -31,12 +34,43 @@ const Home: React.FC = () => {
 
   const isWatchlistView = view === 'watchlist';
 
+  const getCategoryTitle = (cat: string | null) => {
+    switch (cat) {
+      case 'gadgets': return 'Gadgets & Tech';
+      case 'food': return 'Food & Groceries';
+      case 'education': return 'Education';
+      case 'automotive': return 'Automotive';
+      case 'trending': return 'Trending Deals';
+      case 'drops': return 'Price Drops';
+      default: return 'Market Overview';
+    }
+  };
+
+  const getCategoryDescription = (cat: string | null) => {
+    switch (cat) {
+      case 'gadgets': return 'Latest tech gadgets and electronics from Jumia Nigeria';
+      case 'food': return 'Fresh groceries and food items at competitive prices';
+      case 'education': return 'Books, courses, and educational materials';
+      case 'automotive': return 'Cars, parts, and automotive accessories';
+      case 'trending': return 'Hot deals and trending products right now';
+      case 'drops': return 'Products with recent price reductions';
+      default: return 'Live market intelligence from Jumia Nigeria';
+    }
+  };
+
   useEffect(() => {
     const fetchMarketData = async () => {
       if (isWatchlistView) return;
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8080/products${searchQuery ? `?search=${encodeURIComponent(searchQuery)}` : ''}`);
+        const params = new URLSearchParams();
+        if (searchQuery) params.append('search', searchQuery);
+        if (category) params.append('category', category);
+        
+        const queryString = params.toString();
+        const url = `http://localhost:8080/products${queryString ? `?${queryString}` : ''}`;
+        
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -51,7 +85,7 @@ const Home: React.FC = () => {
       }
     };
     fetchMarketData();
-  }, [searchQuery, isWatchlistView]);
+  }, [searchQuery, category, isWatchlistView]);
 
   const calculateDelta = (currentStr: string, previousStr: string) => {
     const current = parseFloat(currentStr);
@@ -73,22 +107,40 @@ const Home: React.FC = () => {
       <header className={`flex flex-row items-end justify-between gap-2 pb-6 ${isDark ? 'border-b border-slate-800/50' : 'border-b border-slate-200/50'}`}>
         <div className="flex flex-col gap-1">
           <h1 className={`text-3xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            {isWatchlistView ? 'My Watchlist' : 'Market Overview'}
+            {isWatchlistView ? 'My Watchlist' : getCategoryTitle(category)}
           </h1>
           <p className={`text-sm ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
-            {searchQuery ? `Results for "${searchQuery}"` : 'Live market intelligence from Jumia Nigeria'}
+            {searchQuery ? `Results for "${searchQuery}"` : getCategoryDescription(category)}
           </p>
         </div>
 
-        {isWatchlistView && watchlistItems.length > 0 && (
-          <button 
-            onClick={clearWatchlist}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg border transition-all active:scale-95 ${isDark ? 'text-rose-500 hover:bg-rose-500/10 border-rose-500/20' : 'text-rose-600 hover:bg-rose-100 border-rose-200'}`}
-          >
-            <Trash2 size={14} />
-            Clear Watchlist
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {/* View Toggle */}
+          <div className="flex items-center bg-slate-800/50 rounded-lg p-1">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <Grid3X3 size={16} />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'}`}
+            >
+              <List size={16} />
+            </button>
+          </div>
+
+          {isWatchlistView && watchlistItems.length > 0 && (
+            <button 
+              onClick={clearWatchlist}
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg border transition-all active:scale-95 ${isDark ? 'text-rose-500 hover:bg-rose-500/10 border-rose-500/20' : 'text-rose-600 hover:bg-rose-100 border-rose-200'}`}
+            >
+              <Trash2 size={14} />
+              Clear Watchlist
+            </button>
+          )}
+        </div>
       </header>
 
       {loading ? (
@@ -97,9 +149,11 @@ const Home: React.FC = () => {
           <p className={`animate-pulse font-medium ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>Scanning live prices...</p>
         </div>
       ) : displayData.length > 0 ? (
-        <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6`}>
+        <div className={viewMode === 'grid' 
+          ? `grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6`
+          : `space-y-4`
+        }>
           {displayData.map((item: any) => {
-            // Handle BigDecimal from API (could be string or number)
             const avgPrice = typeof item.avg_price === 'string' ? parseFloat(item.avg_price) : (typeof item.avg_price === 'number' ? item.avg_price : 0);
             const previousPrice = item.previous_price ? (typeof item.previous_price === 'string' ? parseFloat(item.previous_price) : (typeof item.previous_price === 'number' ? item.previous_price : undefined)) : undefined;
             
@@ -117,6 +171,7 @@ const Home: React.FC = () => {
                   delta={deltaValue}
                   img={item.image_url || item.img || 'https://via.placeholder.com/400'}
                   isDark={isDark}
+                  viewMode={viewMode}
                 />
               </div>
             );

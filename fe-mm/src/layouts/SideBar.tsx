@@ -1,5 +1,5 @@
 import { LayoutGrid, TrendingUp, ArrowDown, Utensils, Smartphone, GraduationCap, Car, X, Heart } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useNavStore } from '../store/useNavStore.ts';
 import { useAuthStore } from '../store/useAuthStore.ts';
 
@@ -21,13 +21,31 @@ interface SideBarProps {
 const SideBar: React.FC<SideBarProps> = ({ isDark = true }) => {
   const { isSidebarOpen, closeSidebar } = useNavStore();
   const { login, isAuthenticated, user } = useAuthStore();
+  const location = useLocation();
+
+  const getCurrentCategory = () => {
+    const params = new URLSearchParams(location.search);
+    const category = params.get('category');
+    const view = params.get('view');
+    
+    if (view === 'watchlist') return 'Watchlist';
+    if (category === 'trending') return 'Trending';
+    if (category === 'drops') return 'Price Drops';
+    if (category === 'food') return 'Food & Groceries';
+    if (category === 'gadgets') return 'Gadgets & Tech';
+    if (category === 'education') return 'Education';
+    if (category === 'automotive') return 'Automotive';
+    return 'All Items';
+  };
+
+  const currentCategory = getCurrentCategory();
 
   const handleSimulateLogin = () => {
     login({ 
       id: '1', 
       name: 'Rusty Radon', 
       email: 'rusty@radon.com' 
-    });
+    }, 'dummy-token');
   };
 
   return (
@@ -59,17 +77,24 @@ const SideBar: React.FC<SideBarProps> = ({ isDark = true }) => {
           </div>
 
           <nav className="space-y-1 flex-1 overflow-y-auto custom-scrollbar">
-            {categories.map((cat) => (
-              <Link
-                key={cat.name}
-                to={cat.path}
-                onClick={closeSidebar}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'}`}
-              >
-                <cat.icon size={20} className="group-hover:text-blue-400 transition-colors" />
-                <span className="text-sm font-medium">{cat.name}</span>
-              </Link>
-            ))}
+            {categories.map((cat) => {
+              const isActive = cat.name === currentCategory;
+              return (
+                <Link
+                  key={cat.name}
+                  to={cat.path}
+                  onClick={closeSidebar}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all group ${
+                    isActive 
+                      ? (isDark ? 'bg-blue-600/20 text-blue-400 border border-blue-600/30' : 'bg-blue-100 text-blue-700 border border-blue-200')
+                      : (isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800/50' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200')
+                  }`}
+                >
+                  <cat.icon size={20} className={`transition-colors ${isActive ? 'text-blue-400' : 'group-hover:text-blue-400'}`} />
+                  <span className="text-sm font-medium">{cat.name}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           <div className={`mt-auto pt-4 px-2 ${isDark ? 'border-t border-slate-800' : 'border-t border-slate-200'}`}>

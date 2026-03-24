@@ -2,7 +2,6 @@ use scraper::{Html, Selector};
 use reqwest::Client;
 use dotenvy::dotenv;
 use shared::{establish_connection, clean_price};
-use bigdecimal::{BigDecimal, FromPrimitive};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -46,8 +45,24 @@ async fn main() -> anyhow::Result<()> {
             .map(|s| s.to_string());
 
         if !name.is_empty() && !price_str.is_empty() {
-            let price_f = clean_price(&price_str);
-            let price_bd = BigDecimal::from_f64(price_f).unwrap_or_else(|| BigDecimal::from(0));
+            let price = clean_price(&price_str);
+            let trimmed_name = name.trim().to_string();
+
+            // Determine category based on product name
+            let category = if name.to_lowercase().contains("laptop") || 
+                           name.to_lowercase().contains("computer") ||
+                           name.to_lowercase().contains("phone") ||
+                           name.to_lowercase().contains("tablet") ||
+                           name.to_lowercase().contains("headphone") ||
+                           name.to_lowercase().contains("charger") ||
+                           name.to_lowercase().contains("mouse") ||
+                           name.to_lowercase().contains("keyboard") ||
+                           name.to_lowercase().contains("monitor") ||
+                           name.to_lowercase().contains("speaker") {
+                "gadgets"
+            } else {
+                "gadgets" // Default to gadgets for now, can be expanded
+            };
 
             let result = sqlx::query!(
                 r#"
@@ -57,12 +72,12 @@ async fn main() -> anyhow::Result<()> {
                     previous_price = products.avg_price,
                     avg_price = EXCLUDED.avg_price,
                     image_url = EXCLUDED.image_url,
-                    last_updated = CURRENT_TIMESTAMP
+                    last_updated = datetime('now')
                 RETURNING id
                 "#,
-                name.trim(),
-                "laptops",
-                price_bd,
+                trimmed_name,
+                category,
+                price,
                 image_url
             )
             .fetch_one(&pool)

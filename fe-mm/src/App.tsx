@@ -6,12 +6,17 @@ import Login from './pages/Login.tsx';
 import Signup from './pages/Signup.tsx';
 import Home from './pages/Home.tsx';
 import ProfileSettings from './pages/ProfileSettings.tsx';
+import AdminUsers from './pages/AdminUsers.tsx';
 import MainLayout from './layouts/MainLayout.tsx';
 
-// Wrapper to protect routes that require login
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuthStore();
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+const AdminProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  return isAuthenticated && user?.is_admin ? <>{children}</> : <Navigate to="/" replace />;
 };
 
 function App() {
@@ -47,7 +52,6 @@ function App() {
     <div className={`min-h-screen transition-colors ${isDark ? 'bg-[#0a0a0c] text-white' : 'bg-white text-slate-900'}`}>
       <Router>
         <Routes>
-          {/* Auth Routes */}
           <Route 
             path="/login" 
             element={!isAuthenticated ? <Login /> : <Navigate to="/" replace />} 
@@ -57,7 +61,6 @@ function App() {
             element={!isAuthenticated ? <Signup /> : <Navigate to="/" replace />} 
           />
           
-          {/* App Routes */}
           <Route 
             path="/*" 
             element={
@@ -71,6 +74,14 @@ function App() {
                         <ProfileSettings />
                       </ProtectedRoute>
                     } 
+                  />
+                  <Route
+                    path="/admin/users"
+                    element={
+                      <AdminProtectedRoute>
+                        <AdminUsers />
+                      </AdminProtectedRoute>
+                    }
                   />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
