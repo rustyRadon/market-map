@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { useAuthStore } from './useAuthStore';
 
 interface WatchlistItem {
   id: string;
@@ -9,32 +10,61 @@ interface WatchlistItem {
   img: string;
 }
 
+interface WatchlistData {
+  [userId: string]: WatchlistItem[];
+}
+
 interface WatchlistState {
-  items: WatchlistItem[];
+  data: WatchlistData;
   toggleWatchlist: (item: WatchlistItem) => void;
   isInWatchlist: (id: string) => boolean;
-  clearWatchlist: () => void; 
+  clearWatchlist: () => void;
+  getUserItems: () => WatchlistItem[];
 }
 
 export const useWatchlistStore = create<WatchlistState>()(
   persist(
     (set, get) => ({
-      items: [],
+      data: {},
       
+      getUserItems: () => {
+        const user = useAuthStore.getState().user;
+        if (!user) return [];
+        return get().data[user.id] || [];
+      },
+
       toggleWatchlist: (item) => {
-        const isExist = get().items.find((i) => i.id === item.id);
-        if (isExist) {
-          set({ items: get().items.filter((i) => i.id !== item.id) });
-        } else {
-          set({ items: [item, ...get().items] });
-        }
+        const user = useAuthStore.getState().user;
+        if (!user) return;
+        
+        const userItems = get().data[user.id] || [];
+        const isExist = userItems.find((i) => i.id === item.id);
+        
+        const newUserItems = isExist 
+          ? userItems.filter((i) => i.id !== item.id)
+          : [item, ...userItems];
+        
+        set({ 
+          data: { 
+            ...get().data, 
+            [user.id]: newUserItems 
+          } 
+        });
       },
 
       isInWatchlist: (id) => {
-        return get().items.some((item) => item.id === id);
+        const userItems = get().getUserItems();
+        return userItems.some((item) => item.id === id);
       },
 
-      clearWatchlist: () => set({ items: [] }),
+      clearWatchlist: () => {
+        const user = useAuthStore.getState().user;
+        if (!user) return;
+        
+        const newData = { ...get().data };
+        delete newData[user.id];
+        set({ data: newData });
+      },
     }),
     { name: 'market-map-watchlist' }
   )

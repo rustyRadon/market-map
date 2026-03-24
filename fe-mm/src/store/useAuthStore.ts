@@ -39,12 +39,24 @@ export const useAuthStore = create<AuthState>()(
         profileImage: `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2563eb&color=fff&bold=true`
       }),
 
-      logout: () => set({ 
-        user: null, 
-        token: null,
-        isAuthenticated: false,
-        profileImage: 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&bold=true'
-      }),
+      logout: () => {
+        // Clear user-specific data from localStorage
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('market-map-watchlist-')) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => localStorage.removeItem(key));
+        
+        set({ 
+          user: null, 
+          token: null,
+          isAuthenticated: false,
+          profileImage: 'https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&bold=true'
+        });
+      },
 
       setInitialLoading: (loading) => set({ isInitialLoading: loading }),
 

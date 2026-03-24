@@ -25,7 +25,8 @@ const Home: React.FC = () => {
   const { viewMode, setViewMode } = useNavStore();
   const view = searchParams.get('view'); 
   const category = searchParams.get('category');
-  const { items: watchlistItems, clearWatchlist } = useWatchlistStore();
+  const { getUserItems, clearWatchlist } = useWatchlistStore();
+  const watchlistItems = getUserItems();
 
   const [marketData, setMarketData] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);

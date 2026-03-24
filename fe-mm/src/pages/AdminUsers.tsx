@@ -20,7 +20,7 @@ const AdminUsers = () => {
   const [addingAdmin, setAddingAdmin] = useState(false);
 
   // Only allow specific admin email
-  const isSuperAdmin = user?.email === 'h4554n.abdul@ggmail.com';
+  const isSuperAdmin = user?.email === 'h4554n.abdul@gmail.com';
 
   useEffect(() => {
     if (!isSuperAdmin) {

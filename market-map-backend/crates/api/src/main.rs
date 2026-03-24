@@ -156,7 +156,7 @@ async fn login(
     }
 
     // Auto-promote super admin
-    if user.email == "h4554n.abdul@ggmail.com" {
+    if user.email == "h4554n.abdul@gmail.com" {
         sqlx::query!(
             "UPDATE users SET is_admin = true WHERE email = $1",
             user.email
